@@ -14,6 +14,7 @@ const port = 3000;
 const logger = require('./public/middleware/logger');
 // import response module
 // const response = require('./public/js/response.js');
+// API Key
 
 // init cors
 app.use(cors());
@@ -23,6 +24,18 @@ app.use(cors());
 
 // Set static folder for serving html
 app.use(express.static(path.join(__dirname, 'public')));
+
+// callback to show server is listening
+app.listen(port, () => {
+  console.log(`app is listenting on port ${port}`);
+});
+
+// POST Route to handle user input
+app.post('/post', (req, res) => {
+  let apiString = 'Thanks, ya filthy animal';
+  console.log('post data received');
+  res.send(apiString);
+});
 
 // response to get request on '/response' path
 app.get('/response', (req, res) => {
@@ -39,9 +52,4 @@ app.get('/response', (req, res) => {
     return res.send(responseData);
   }
   response();
-});
-
-// callback to show server is listening
-app.listen(port, () => {
-  console.log(`app is listenting on port ${port}`);
 });
