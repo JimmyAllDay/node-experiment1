@@ -1,16 +1,47 @@
+// add express
 const express = require('express');
+// add path
+const path = require('path');
+// add cors
+const cors = require('cors');
+// import node-fetch
+const fetch = require('node-fetch');
+// create a new instance of express
 const app = express();
+// set port
 const port = 3000;
-const response = "here's some stuff";
+// import logger
+const logger = require('./public/middleware/logger');
+// import response module
+// const response = require('./public/js/response.js');
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
+// init cors
+app.use(cors());
 
+// init logger middleware
+// app.use(logger);
+
+// Set static folder for serving html
+app.use(express.static(path.join(__dirname, 'public')));
+
+// response to get request on '/response' path
 app.get('/response', (req, res) => {
-  res.send(response);
+  async function response() {
+    let responseData = [];
+    await fetch('http://www.boredapi.com/api/activity')
+      .then(res => {
+        return res.json();
+      })
+      .then(data => {
+        responseData = data;
+      });
+    console.log(responseData);
+    return res.send(responseData);
+  }
+  response();
 });
 
+// callback to show server is listening
 app.listen(port, () => {
   console.log(`app is listenting on port ${port}`);
 });
